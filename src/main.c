@@ -72,8 +72,10 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
-	  GPIOA->ODR ^= (1 << 5);
-	  _delay(10000);
+	  GPIOA->BSRRL |= (1 << 5);
+	  _delay(100000);
+	  GPIOA->BSRRH |= (1 << 5);
+	  _delay(100000);
   }
 
   return 0;
