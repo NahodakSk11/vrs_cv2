@@ -47,7 +47,7 @@ SOFTWARE.
 **===========================================================================
 */
 
-void _delay(unsigned int i)
+void delay(unsigned int i)
 {
 	for(; i; i--);
 }
@@ -80,10 +80,12 @@ int main(void)
   /* Infinite loop */
   while (1)
   {
-	  unsigned int button = GPIOC->IDR & (1 << 13);
-	  if (button) GPIOA->BSRRL |= (1 << 5);
-	  else  GPIOA->BSRRH |= (1 << 5);
-	  _delay(10000);
+	  static unsigned int lastButton = 0;
+	  unsigned int button = ~GPIOC->IDR & (1 << 13);
+	  unsigned int change = button ^ lastButton;
+	  if (change && button) GPIOA->ODR ^= (1 << 5);
+	  lastButton = button;
+	  delay(10000);
   }
 
   return 0;
